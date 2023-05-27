@@ -14,114 +14,210 @@ const cardTwoImg = document.querySelector('#card-2-img');
 const cardThreeImg = document.querySelector('#card-3-img');
 const cardFourImg = document.querySelector('#card-4-img');
 const cardFiveImg = document.querySelector('#card-5-img');
-////
 
-/////////////////// STEPS NEEDED
-// Gen. 5 playing Cards & Render them
+//// Gen. Suit & Num
+const generateSuit = function () {
+  return Math.floor(Math.random() * 4 + 1);
+};
 
-// gen. random suit & number
-const generateSuit = Math.floor(Math.random() * 4 + 1);
-const generateNumber = Math.floor(Math.random() * 13 + 1);
+const generateNumber = function () {
+  return Math.floor(Math.random() * 13 + 1);
+};
 
-// Grab generated Suit Name  (via Rand. Num + Switch)
-// Grab generated Card Name  (via Rand. Num + Switch)
-let suit;
-let cardNumber;
+//// FNs w/ Switches Inside
+//  they Receive a Num & Return a suitname or Number - so can Build a STR for <img src="..."
+const suitSwitch = function (numberOfSuit) {
+  let suit;
 
-switch (generateSuit) {
-  case 1:
-    suit = 'clubs';
-    break;
+  switch (numberOfSuit) {
+    case 1:
+      suit = 'clubs';
+      break;
 
-  case 2:
-    suit = 'spades';
-    break;
+    case 2:
+      suit = 'spades';
+      break;
 
-  case 3:
-    suit = 'diamonds';
-    break;
+    case 3:
+      suit = 'diamonds';
+      break;
 
-  case 4:
-    suit = 'hearts';
-    break;
-}
-// console.log(suit);
+    case 4:
+      suit = 'hearts';
+      break;
+  }
 
-switch (generateNumber) {
-  case 1:
-    cardNumber = 'ace';
-    break;
+  return suit;
+};
 
-  case 2:
-    cardNumber = '2';
-    break;
+const numberSwitch = function (number) {
+  let cardNumber;
 
-  case 3:
-    cardNumber = '3';
-    break;
+  switch (number) {
+    case 1:
+      cardNumber = 'ace';
+      break;
 
-  case 4:
-    cardNumber = '4';
-    break;
+    case 2:
+      cardNumber = '2';
+      break;
 
-  case 5:
-    cardNumber = '5';
-    break;
+    case 3:
+      cardNumber = '3';
+      break;
 
-  case 6:
-    cardNumber = '6';
-    break;
+    case 4:
+      cardNumber = '4';
+      break;
 
-  case 7:
-    cardNumber = '7';
-    break;
+    case 5:
+      cardNumber = '5';
+      break;
 
-  case 8:
-    cardNumber = '8';
-    break;
+    case 6:
+      cardNumber = '6';
+      break;
 
-  case 9:
-    cardNumber = '9';
-    break;
+    case 7:
+      cardNumber = '7';
+      break;
 
-  case 10:
-    cardNumber = '10';
-    break;
+    case 8:
+      cardNumber = '8';
+      break;
 
-  case 11:
-    cardNumber = 'jack';
-    break;
+    case 9:
+      cardNumber = '9';
+      break;
 
-  case 12:
-    cardNumber = 'queen';
-    break;
+    case 10:
+      cardNumber = '10';
+      break;
 
-  case 13:
-    cardNumber = 'king';
-    break;
-}
+    case 11:
+      cardNumber = 'jack';
+      break;
 
-// File name STR (to match IMG File name - for Rendering)
-let cardName = `./images/${suit}_${cardNumber}.svg`;
+    case 12:
+      cardNumber = 'queen';
+      break;
 
-cardOneImg.src = `${cardName}`;
-// // File name STR (to match IMG File name - for Rendering)
-// let cardName = `./images/${suit}_${cardNumber}.svg`;
+    case 13:
+      cardNumber = 'king';
+      break;
+  }
 
-// // diceOne.src = `./images/dice${dice1}.png`;
+  return cardNumber;
+};
 
-// const html = `<div>
-//                 <img src="${cardName}">
-//               </div>
+//// Card FNs
+// These ALL Call Rand Num FNs
+// Call Switch FNs
+// Build a STR (for .src)
+// Upd the .src in DOM
 
-// `;
+const cardResult1 = function () {
+  let cardSuit = 0;
+  let cardNumber = 0;
 
-// // Grab Container div
-// const docBody = document.querySelector('body');
-// // console.log(docBody);
+  // Call FN & Grab its Gen. Suit & Num
+  cardSuit = generateSuit();
+  cardNumber = generateNumber();
 
-// docBody.insertAdjacentHTML('afterbegin', html);
+  // Call FNs w/ Switches in them - Passing the Rand. Nums
+  // Grab the Returned Suit & Card Num from them
+  const suitResult = suitSwitch(cardSuit);
+  const numberResult = numberSwitch(cardNumber);
 
-// create img
-console.log(cardNumber);
-console.log(cardName);
+  // File name STR (to match IMG File name - for Rendering)
+  let cardName = `./images/${suitResult}_${numberResult}.svg`;
+
+  // Upd the SRC for IMG
+  cardOneImg.src = `${cardName}`;
+};
+
+cardResult1();
+
+const cardResult2 = function () {
+  let cardSuit = 0;
+  let cardNumber = 0;
+  // Call FN & Grab its Gen. Suit & Num
+  cardSuit = generateSuit();
+  cardNumber = generateNumber();
+
+  // Call FNs w/ Switches in them - Passing the Rand. Nums
+  // Grab the Returned Suit & Card Num from them
+  const suitResult = suitSwitch(cardSuit);
+  const numberResult = numberSwitch(cardNumber);
+
+  // File name STR (to match IMG File name - for Rendering)
+  let cardName = `./images/${suitResult}_${numberResult}.svg`;
+
+  // Upd the SRC for IMG
+  cardTwoImg.src = `${cardName}`;
+};
+
+cardResult2();
+
+const cardResult3 = function () {
+  let cardSuit = 0;
+  let cardNumber = 0;
+  // Call FN & Grab its Gen. Suit & Num
+  cardSuit = generateSuit();
+  cardNumber = generateNumber();
+
+  // Call FNs w/ Switches in them - Passing the Rand. Nums
+  // Grab the Returned Suit & Card Num from them
+  const suitResult = suitSwitch(cardSuit);
+  const numberResult = numberSwitch(cardNumber);
+
+  // File name STR (to match IMG File name - for Rendering)
+  let cardName = `./images/${suitResult}_${numberResult}.svg`;
+
+  // Upd the SRC for IMG
+  cardThreeImg.src = `${cardName}`;
+};
+
+cardResult3();
+
+const cardResult4 = function () {
+  let cardSuit = 0;
+  let cardNumber = 0;
+  // Call FN & Grab its Gen. Suit & Num
+  cardSuit = generateSuit();
+  cardNumber = generateNumber();
+
+  // Call FNs w/ Switches in them - Passing the Rand. Nums
+  // Grab the Returned Suit & Card Num from them
+  const suitResult = suitSwitch(cardSuit);
+  const numberResult = numberSwitch(cardNumber);
+
+  // File name STR (to match IMG File name - for Rendering)
+  let cardName = `./images/${suitResult}_${numberResult}.svg`;
+
+  // Upd the SRC for IMG
+  cardFourImg.src = `${cardName}`;
+};
+
+cardResult4();
+
+const cardResult5 = function () {
+  let cardSuit = 0;
+  let cardNumber = 0;
+  // Call FN & Grab its Gen. Suit & Num
+  cardSuit = generateSuit();
+  cardNumber = generateNumber();
+
+  // Call FNs w/ Switches in them - Passing the Rand. Nums
+  // Grab the Returned Suit & Card Num from them
+  const suitResult = suitSwitch(cardSuit);
+  const numberResult = numberSwitch(cardNumber);
+
+  // File name STR (to match IMG File name - for Rendering)
+  let cardName = `./images/${suitResult}_${numberResult}.svg`;
+
+  // Upd the SRC for IMG
+  cardFiveImg.src = `${cardName}`;
+};
+
+cardResult5();

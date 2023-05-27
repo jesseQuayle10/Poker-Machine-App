@@ -1,3 +1,40 @@
-* {
-  color: red;
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  /* // 10px */
+  font-size: 62.5%;
+}
+
+.container {
+  margin: 0 auto;
+  max-width: 114rem;
+  border: 1px solid blue;
+}
+
+header {
+  height: 9rem;
+}
+
+.card-container {
+  max-width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  column-gap: 1.6rem;
+}
+
+.card-img {
+  max-width: 100%;
+  object-fit: cover;
+}
+
+h1 {
+  font-size: 3.2rem;
+  text-align: center;
+  margin-top: 3.2rem;
 }
