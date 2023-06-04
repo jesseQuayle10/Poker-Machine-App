@@ -47,6 +47,14 @@ button {
   transition: 0.1s ease-in-out;
 }
 
+/* #play-btn {
+  opacity: 0;
+} */
+
+.hide-element {
+  opacity: 0;
+}
+
 .container {
   margin: 0 auto;
   max-width: 114rem;
@@ -67,6 +75,12 @@ header {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   column-gap: 1.6rem;
+}
+
+#buttons-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
 }
 
 .card {

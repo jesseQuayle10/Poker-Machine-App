@@ -16,7 +16,10 @@ const cardFourImg = document.querySelector('#card-4-img');
 const cardFiveImg = document.querySelector('#card-5-img');
 
 // BTNs
+// To add a "NEW GAME" BTN
+const buttonsContainer = document.querySelector('#buttons-container');
 const dealBtn = document.querySelector('#deal-btn');
+const playBtn = document.querySelector('#play-btn');
 
 const holdBtnOne = document.querySelector('#card-1-btn');
 const holdBtnTwo = document.querySelector('#card-2-btn');
@@ -25,11 +28,53 @@ const holdBtnFour = document.querySelector('#card-4-btn');
 const holdBtnFive = document.querySelector('#card-5-btn');
 
 //// Gl. VARs
+
+// So can only Deal/Draw 2x
+// to stop the ability to hold a Card b4 you DEAL
+// also to change Text on Deal BTN to Draw
+let dealCount = 0;
+
+// Initial Card Held VAL = F
 let cardOneIsHeld = false;
 let cardTwoIsHeld = false;
 let cardThreeIsHeld = false;
 let cardFourIsHeld = false;
 let cardFiveIsHeld = false;
+
+// Init. Game
+const init = function () {
+  //
+  cardOneImg.src = './images/blue2.svg';
+  cardTwoImg.src = './images/blue2.svg';
+  cardThreeImg.src = './images/blue2.svg';
+  cardFourImg.src = './images/blue2.svg';
+  cardFiveImg.src = './images/blue2.svg';
+
+  // Reset HELD VALs to = F (so can Gen. Rand. Nums)
+  cardOneIsHeld = false;
+  cardTwoIsHeld = false;
+  cardThreeIsHeld = false;
+  cardFourIsHeld = false;
+  cardFiveIsHeld = false;
+
+  // So can Add Class for Styling HELD Card (CSS Filter)
+  dealCount = 0;
+
+  // Hide PLAY AGAIN BTN - on Game Start
+  playBtn.classList.add('hide-element');
+
+  // Reset Text to Initial
+  dealBtn.textContent = 'DEAL';
+
+  // Rem. CSS Filter Styling (for when Card is Held)
+  cardOneDiv.classList.remove('card-held');
+  cardTwoDiv.classList.remove('card-held');
+  cardThreeDiv.classList.remove('card-held');
+  cardFourDiv.classList.remove('card-held');
+  cardFiveDiv.classList.remove('card-held');
+};
+
+init();
 
 //// Gen. Suit & Num
 const generateSuit = function () {
@@ -248,15 +293,26 @@ const cardResult5 = function () {
   }
 };
 
-//// EVTs
-// Deal/Draw BTN
-
-let dealCount = 0;
-
+///////////////////// EVTs
+//// Deal BTN
 dealBtn.addEventListener('click', function (e) {
   // VAR so no More than 2 Deal/Draws Poss
   dealCount++;
   console.log(dealCount);
+
+  if (dealCount > 0) {
+    playBtn.classList.remove('hide-element');
+    this.textContent = 'DRAW';
+  }
+
+  // if (dealCount === 2) {
+  //   const newHtml = `
+  //     <div class="deal-button">
+  //       <button class="btn-large" id="draw-btn">NEW GAME</button>
+  //     </div>`;
+
+  //   buttonsContainer.insertAdjacentHTML('beforeend', newHtml);
+  // }
 
   // Call Gen. Rand Nums FNs
   // bc ea "card FN" has eg. "cardFiveIsHeld" - these will ONLY Exec. if !cardFiveIsHeld
@@ -271,60 +327,75 @@ dealBtn.addEventListener('click', function (e) {
     cardResult4();
 
     cardResult5();
-
-    // Incr. dealCount
-
-    console.log(dealCount);
   }
+});
+
+playBtn.addEventListener('click', function (e) {
+  init();
 });
 
 //// HOLD BTNs
 holdBtnOne.addEventListener('click', function (e) {
-  // Flip State Boolean
-  cardOneIsHeld ? (cardOneIsHeld = false) : (cardOneIsHeld = true);
+  // Check VAL - so cant HOLD a Card before you Start game
+  if (dealCount > 0) {
+    // Flip State Boolean
+    cardOneIsHeld ? (cardOneIsHeld = false) : (cardOneIsHeld = true);
 
-  // IF = Card IS HELD = ADD CSS Low B/Ness CLASS - ELSE Rem. it
-  cardOneIsHeld
-    ? cardOneDiv.classList.add('card-held')
-    : cardOneDiv.classList.remove('card-held');
+    // IF = Card IS HELD = ADD CSS Low B/Ness CLASS - ELSE Rem. it
+    cardOneIsHeld
+      ? cardOneDiv.classList.add('card-held')
+      : cardOneDiv.classList.remove('card-held');
+  }
 });
 
 holdBtnTwo.addEventListener('click', function (e) {
-  // Flip State Boolean
-  cardTwoIsHeld ? (cardTwoIsHeld = false) : (cardTwoIsHeld = true);
+  // Check VAL - so cant HOLD a Card before you Start game
+  if (dealCount > 0) {
+    // Flip State Boolean
+    cardTwoIsHeld ? (cardTwoIsHeld = false) : (cardTwoIsHeld = true);
 
-  // IF = Card IS HELD = ADD CSS Low B/Ness CLASS - ELSE Rem. it
-  cardTwoIsHeld
-    ? cardTwoDiv.classList.add('card-held')
-    : cardTwoDiv.classList.remove('card-held');
+    // IF = Card IS HELD = ADD CSS Low B/Ness CLASS - ELSE Rem. it
+    cardTwoIsHeld
+      ? cardTwoDiv.classList.add('card-held')
+      : cardTwoDiv.classList.remove('card-held');
+  }
 });
 
 holdBtnThree.addEventListener('click', function (e) {
-  // Flip State Boolean
-  cardThreeIsHeld ? (cardThreeIsHeld = false) : (cardThreeIsHeld = true);
+  // Check VAL - so cant HOLD a Card before you Start game
+  if (dealCount > 0) {
+    // Flip State Boolean
+    cardThreeIsHeld ? (cardThreeIsHeld = false) : (cardThreeIsHeld = true);
 
-  // IF = Card IS HELD = ADD CSS Low B/Ness CLASS - ELSE Rem. it
-  cardThreeIsHeld
-    ? cardThreeDiv.classList.add('card-held')
-    : cardThreeDiv.classList.remove('card-held');
+    // IF = Card IS HELD = ADD CSS Low B/Ness CLASS - ELSE Rem. it
+    cardThreeIsHeld
+      ? cardThreeDiv.classList.add('card-held')
+      : cardThreeDiv.classList.remove('card-held');
+  }
 });
 
 holdBtnFour.addEventListener('click', function (e) {
-  // Flip State Boolean
-  cardFourIsHeld ? (cardFourIsHeld = false) : (cardFourIsHeld = true);
+  // Check VAL - so cant HOLD a Card before you Start game
+  if (dealCount > 0) {
+    // Flip State Boolean
+    cardFourIsHeld ? (cardFourIsHeld = false) : (cardFourIsHeld = true);
 
-  // IF = Card IS HELD = ADD CSS Low B/Ness CLASS - ELSE Rem. it
-  cardFourIsHeld
-    ? cardFourDiv.classList.add('card-held')
-    : cardFourDiv.classList.remove('card-held');
+    // IF = Card IS HELD = ADD CSS Low B/Ness CLASS - ELSE Rem. it
+    cardFourIsHeld
+      ? cardFourDiv.classList.add('card-held')
+      : cardFourDiv.classList.remove('card-held');
+  }
 });
 
 holdBtnFive.addEventListener('click', function (e) {
-  // Flip State Boolean
-  cardFiveIsHeld ? (cardFiveIsHeld = false) : (cardFiveIsHeld = true);
+  // Check VAL - so cant HOLD a Card before you Start game
+  if (dealCount > 0) {
+    // Flip State Boolean
+    cardFiveIsHeld ? (cardFiveIsHeld = false) : (cardFiveIsHeld = true);
 
-  // IF = Card IS HELD = ADD CSS Low B/Ness CLASS - ELSE Rem. it
-  cardFiveIsHeld
-    ? cardFiveDiv.classList.add('card-held')
-    : cardFiveDiv.classList.remove('card-held');
+    // IF = Card IS HELD = ADD CSS Low B/Ness CLASS - ELSE Rem. it
+    cardFiveIsHeld
+      ? cardFiveDiv.classList.add('card-held')
+      : cardFiveDiv.classList.remove('card-held');
+  }
 });
