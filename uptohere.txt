@@ -1,0 +1,1 @@
+Since changing to .slice() - instead of .splice() - I'm not running out of Cards - BUT DUPLICATE Card Prob has Returned

@@ -1,5 +1,9 @@
 'use strict';
 
+// Import Cards ARR (contains a Partial STR - to Embed in .src Path)
+// ...when a Card is Drawn it is Rem'd from the ARR (thus it cant be Rendered again (so = NO Duplicate Cards Rendered))
+// import { possibleCards } from './possibleCards.js';
+
 //// DOM EL's
 // Card DIVs
 const cardOneDiv = document.querySelector('#card-1');
@@ -28,6 +32,71 @@ const holdBtnFour = document.querySelector('#card-4-btn');
 const holdBtnFive = document.querySelector('#card-5-btn');
 
 //// Gl. VARs
+// Stop Duplicate Cards - by:
+// ARR Contains ALL POSS Cards
+// ...as a Card is Drawn it gets Rem'd from ARR - so that Card cant be redrawn
+// ...this STR gets Embedded in .src in ea Card FN
+// Instead of 2 Gens(Suit & num) = just 1 Gen'd Num (out of remaining .length of ARR)
+let possibleCards = [
+  'clubs_2',
+  'clubs_3',
+  'clubs_4',
+  'clubs_5',
+  'clubs_6',
+  'clubs_7',
+  'clubs_8',
+  'clubs_9',
+  'clubs_10',
+  'clubs_ace',
+  'clubs_jack',
+  'clubs_queen',
+  'clubs_king',
+  'diamonds_2',
+  'diamonds_3',
+  'diamonds_4',
+  'diamonds_5',
+  'diamonds_6',
+  'diamonds_7',
+  'diamonds_8',
+  'diamonds_9',
+  'diamonds_10',
+  'diamonds_ace',
+  'diamonds_jack',
+  'diamonds_queen',
+  'diamonds_king',
+  'hearts_2',
+  'hearts_3',
+  'hearts_4',
+  'hearts_5',
+  'hearts_6',
+  'hearts_7',
+  'hearts_8',
+  'hearts_9',
+  'hearts_10',
+  'hearts_ace',
+  'hearts_jack',
+  'hearts_queen',
+  'hearts_king',
+  'spades_2',
+  'spades_3',
+  'spades_4',
+  'spades_5',
+  'spades_6',
+  'spades_7',
+  'spades_8',
+  'spades_9',
+  'spades_10',
+  'spades_ace',
+  'spades_jack',
+  'spades_queen',
+  'spades_king',
+];
+
+// Copy of Cards ARR
+let possibleCardsCopy = [];
+
+// Push Gen'd Card IDX STR here - so can run a check for ea. Card FN to see if the Card the Card FN Gen'd is already in here & IF it is = Re-Gen another Card
+let cardsSelected = [];
 
 // So can only Deal/Draw 2x
 // to stop the ability to hold a Card b4 you DEAL
@@ -41,8 +110,11 @@ let cardThreeIsHeld = false;
 let cardFourIsHeld = false;
 let cardFiveIsHeld = false;
 
-// Init. Game
+//// Init. Game
 const init = function () {
+  // Empty Poss Cards Copy ARR
+  possibleCardsCopy = possibleCards;
+  console.log(possibleCardsCopy);
   //
   cardOneImg.src = './images/blue2.svg';
   cardTwoImg.src = './images/blue2.svg';
@@ -76,99 +148,11 @@ const init = function () {
 
 init();
 
-//// Gen. Suit & Num
-const generateSuit = function () {
-  return Math.floor(Math.random() * 4 + 1);
-};
+//// Gen. Rand num - between 0 & poss Cards ARR .length
+let generateCardIndex = function () {
+  let result = Math.floor(Math.random() * possibleCards.length);
 
-const generateNumber = function () {
-  return Math.floor(Math.random() * 13 + 1);
-};
-
-//// FNs w/ Switches Inside
-//  they Receive a Num & Return a suitname or Number - so can Build a STR for <img src="..."
-const suitSwitch = function (numberOfSuit) {
-  let suit;
-
-  switch (numberOfSuit) {
-    case 1:
-      suit = 'clubs';
-      break;
-
-    case 2:
-      suit = 'spades';
-      break;
-
-    case 3:
-      suit = 'diamonds';
-      break;
-
-    case 4:
-      suit = 'hearts';
-      break;
-  }
-
-  return suit;
-};
-
-const numberSwitch = function (number) {
-  let cardNumber;
-
-  switch (number) {
-    case 1:
-      cardNumber = 'ace';
-      break;
-
-    case 2:
-      cardNumber = '2';
-      break;
-
-    case 3:
-      cardNumber = '3';
-      break;
-
-    case 4:
-      cardNumber = '4';
-      break;
-
-    case 5:
-      cardNumber = '5';
-      break;
-
-    case 6:
-      cardNumber = '6';
-      break;
-
-    case 7:
-      cardNumber = '7';
-      break;
-
-    case 8:
-      cardNumber = '8';
-      break;
-
-    case 9:
-      cardNumber = '9';
-      break;
-
-    case 10:
-      cardNumber = '10';
-      break;
-
-    case 11:
-      cardNumber = 'jack';
-      break;
-
-    case 12:
-      cardNumber = 'queen';
-      break;
-
-    case 13:
-      cardNumber = 'king';
-      break;
-  }
-
-  return cardNumber;
+  return result;
 };
 
 //// Card FNs
@@ -180,116 +164,254 @@ const numberSwitch = function (number) {
 const cardResult1 = function () {
   // Only Run IF Card isnt "Held"
   if (!cardOneIsHeld) {
+    // Copy the Poss Cards into a New ARR
+    // possibleCardsCopy = possibleCards;
+
     // To Hold Returns from Gen. Random Nums
-    let cardSuit = 0;
-    let cardNumber = 0;
+    let cardIndex = 0;
 
-    // Call FN & Grab its Gen. Suit & Num
-    cardSuit = generateSuit();
-    cardNumber = generateNumber();
+    // Call FN to Gen a Card IDX (between 0 & Cards ARR.length)
+    cardIndex = generateCardIndex();
+    // console.log(`card1 IDX is ${cardIndex}`);
 
-    // Call FNs w/ Switches in them - Passing the Rand. Nums
-    // Grab the Returned Suit & Card Num from them
-    const suitResult = suitSwitch(cardSuit);
-    const numberResult = numberSwitch(cardNumber);
+    // Slice the Gen'd Cards STR From Cards ARR
+    const cardsSlice = possibleCardsCopy.slice(cardIndex, cardIndex + 1);
+    console.log(cardsSlice);
 
-    // File name STR (to match IMG File name - for Rendering)
-    let cardName = `./images/${suitResult}_${numberResult}.svg`;
+    // IF cardsSelected ARR Doesnt Incl cardsSlice - PUSH cardsSlice to cardsSelected
+    // ... then 1. Embed cardsSlice in IMG Name  2. Use it to Update IMG .src
+    let isSelected = cardsSelected.includes(cardsSlice);
+    console.log(isSelected);
 
-    // Upd the SRC for IMG
-    cardOneImg.src = `${cardName}`;
+    // IF cardsSelected ARR Incl's cardsSlice
+    // 1. Gen a diff Num for IDX
+    // 2. PUSH it to cardsSelected ARR
+    // 3. Build STR
+    // 4. Change IMG .src
+    if (isSelected) {
+      cardIndex = generateCardIndex();
+
+      cardsSelected.push(cardsSlice);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardOneImg.src = `${cardName}`;
+    }
+
+    // IF cardsSelected.includes(cardsSlice) = F - PUSH cardsSlice to cardsSelected ARR
+    if (!isSelected) {
+      console.log('not selected');
+      cardsSelected.push(cardsSlice);
+      console.log(cardsSelected);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardOneImg.src = `${cardName}`;
+    }
   }
 };
 
 const cardResult2 = function () {
   // Only Run IF Card isnt "Held"
   if (!cardTwoIsHeld) {
+    // Copy the Poss Cards into a New ARR
+    // possibleCardsCopy = possibleCards;
     // To Hold Returns from Gen. Random Nums
-    let cardSuit = 0;
-    let cardNumber = 0;
-    // Call FN & Grab its Gen. Suit & Num
-    cardSuit = generateSuit();
-    cardNumber = generateNumber();
+    let cardIndex = 0;
 
-    // Call FNs w/ Switches in them - Passing the Rand. Nums
-    // Grab the Returned Suit & Card Num from them
-    const suitResult = suitSwitch(cardSuit);
-    const numberResult = numberSwitch(cardNumber);
+    // Call FN to Gen a Card IDX (between 0 & Cards ARR.length)
+    cardIndex = generateCardIndex();
+    // console.log(`card2 IDX is ${cardIndex}`);
 
-    // File name STR (to match IMG File name - for Rendering)
-    let cardName = `./images/${suitResult}_${numberResult}.svg`;
+    // Slice the Gen'd Cards STR From Cards ARR
+    const cardsSlice = possibleCardsCopy.slice(cardIndex, cardIndex + 1);
+    // console.log(cardsSplice);
 
-    // Upd the SRC for IMG
-    cardTwoImg.src = `${cardName}`;
+    // IF cardsSelected ARR Doesnt Incl cardsSlice - PUSH cardsSlice to cardsSelected
+    // ... then 1. Embed cardsSlice in IMG Name  2. Use it to Update IMG .src
+    let isSelected = cardsSelected.includes(cardsSlice);
+
+    // IF cardsSelected ARR Incl's cardsSlice
+    // 1. Gen a diff Num for IDX
+    // 2. PUSH it to cardsSelected ARR
+    // 3. Build STR
+    // 4. Change IMG .src
+    if (isSelected) {
+      cardIndex = generateCardIndex();
+
+      cardsSelected.push(cardsSlice);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardTwoImg.src = `${cardName}`;
+    }
+
+    // IF cardsSelected.includes(cardsSlice) = F - PUSH cardsSlice to cardsSelected ARR
+    if (!isSelected) {
+      cardsSelected.push(cardsSlice);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardTwoImg.src = `${cardName}`;
+    }
   }
 };
 
 const cardResult3 = function () {
   // Only Run IF Card isnt "Held"
   if (!cardThreeIsHeld) {
+    // Copy the Poss Cards into a New ARR
+    // possibleCardsCopy = possibleCards;
     // To Hold Returns from Gen. Random Nums
-    let cardSuit = 0;
-    let cardNumber = 0;
-    // Call FN & Grab its Gen. Suit & Num
-    cardSuit = generateSuit();
-    cardNumber = generateNumber();
+    let cardIndex = 0;
 
-    // Call FNs w/ Switches in them - Passing the Rand. Nums
-    // Grab the Returned Suit & Card Num from them
-    const suitResult = suitSwitch(cardSuit);
-    const numberResult = numberSwitch(cardNumber);
+    // Call FN to Gen a Card IDX (between 0 & Cards ARR.length)
+    cardIndex = generateCardIndex();
+    // console.log(`card3 IDX is ${cardIndex}`);
 
-    // File name STR (to match IMG File name - for Rendering)
-    let cardName = `./images/${suitResult}_${numberResult}.svg`;
+    // Slice the Gen'd Cards STR From Cards ARR
+    const cardsSlice = possibleCardsCopy.slice(cardIndex, cardIndex + 1);
+    // console.log(cardsSplice);
 
-    // Upd the SRC for IMG
-    cardThreeImg.src = `${cardName}`;
+    // IF cardsSelected ARR Doesnt Incl cardsSlice - PUSH cardsSlice to cardsSelected
+    // ... then 1. Embed cardsSlice in IMG Name  2. Use it to Update IMG .src
+    let isSelected = cardsSelected.includes(cardsSlice);
+
+    // IF cardsSelected ARR Incl's cardsSlice
+    // 1. Gen a diff Num for IDX
+    // 2. PUSH it to cardsSelected ARR
+    // 3. Build STR
+    // 4. Change IMG .src
+    if (isSelected) {
+      cardIndex = generateCardIndex();
+
+      cardsSelected.push(cardsSlice);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardThreeImg.src = `${cardName}`;
+    }
+
+    // IF cardsSelected.includes(cardsSlice) = F - PUSH cardsSlice to cardsSelected ARR
+    if (!isSelected) {
+      cardsSelected.push(cardsSlice);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardThreeImg.src = `${cardName}`;
+    }
   }
 };
 
 const cardResult4 = function () {
   // Only Run IF Card isnt "Held"
   if (!cardFourIsHeld) {
+    // Copy the Poss Cards into a New ARR
+    // possibleCardsCopy = possibleCards;
     // To Hold Returns from Gen. Random Nums
-    let cardSuit = 0;
-    let cardNumber = 0;
-    // Call FN & Grab its Gen. Suit & Num
-    cardSuit = generateSuit();
-    cardNumber = generateNumber();
+    let cardIndex = 0;
 
-    // Call FNs w/ Switches in them - Passing the Rand. Nums
-    // Grab the Returned Suit & Card Num from them
-    const suitResult = suitSwitch(cardSuit);
-    const numberResult = numberSwitch(cardNumber);
+    // Call FN to Gen a Card IDX (between 0 & Cards ARR.length)
+    cardIndex = generateCardIndex();
+    // console.log(`card4 IDX is ${cardIndex}`);
 
-    // File name STR (to match IMG File name - for Rendering)
-    let cardName = `./images/${suitResult}_${numberResult}.svg`;
+    // Slice the Gen'd Cards STR From Cards ARR
+    const cardsSlice = possibleCardsCopy.slice(cardIndex, cardIndex + 1);
+    // console.log(cardsSplice);
 
-    // Upd the SRC for IMG
-    cardFourImg.src = `${cardName}`;
+    // IF cardsSelected ARR Doesnt Incl cardsSlice - PUSH cardsSlice to cardsSelected
+    // ... then 1. Embed cardsSlice in IMG Name  2. Use it to Update IMG .src
+    let isSelected = cardsSelected.includes(cardsSlice);
+
+    // IF cardsSelected ARR Incl's cardsSlice
+    // 1. Gen a diff Num for IDX
+    // 2. PUSH it to cardsSelected ARR
+    // 3. Build STR
+    // 4. Change IMG .src
+    if (isSelected) {
+      cardIndex = generateCardIndex();
+
+      cardsSelected.push(cardsSlice);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardFourImg.src = `${cardName}`;
+    }
+
+    // IF cardsSelected.includes(cardsSlice) = F - PUSH cardsSlice to cardsSelected ARR
+    if (!isSelected) {
+      cardsSelected.push(cardsSlice);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardFourImg.src = `${cardName}`;
+    }
   }
 };
 
 const cardResult5 = function () {
   // Only Run IF Card isnt "Held"
   if (!cardFiveIsHeld) {
+    // Copy the Poss Cards into a New ARR
+    // possibleCardsCopy = possibleCards;
     // To Hold Returns from Gen. Random Nums
-    let cardSuit = 0;
-    let cardNumber = 0;
-    // Call FN & Grab its Gen. Suit & Num
-    cardSuit = generateSuit();
-    cardNumber = generateNumber();
+    let cardIndex = 0;
 
-    // Call FNs w/ Switches in them - Passing the Rand. Nums
-    // Grab the Returned Suit & Card Num from them
-    const suitResult = suitSwitch(cardSuit);
-    const numberResult = numberSwitch(cardNumber);
+    // Call FN to Gen a Card IDX (between 0 & Cards ARR.length)
+    cardIndex = generateCardIndex();
+    // console.log(`card5 IDX is ${cardIndex}`);
 
-    // File name STR (to match IMG File name - for Rendering)
-    let cardName = `./images/${suitResult}_${numberResult}.svg`;
+    // Slice the Gen'd Cards STR From Cards ARR
+    const cardsSlice = possibleCardsCopy.slice(cardIndex, cardIndex + 1);
+    // console.log(cardsSplice);
 
-    // Upd the SRC for IMG
-    cardFiveImg.src = `${cardName}`;
+    // IF cardsSelected ARR Doesnt Incl cardsSlice - PUSH cardsSlice to cardsSelected
+    // ... then 1. Embed cardsSlice in IMG Name  2. Use it to Update IMG .src
+    let isSelected = cardsSelected.includes(cardsSlice);
+
+    // IF cardsSelected ARR Incl's cardsSlice
+    // 1. Gen a diff Num for IDX
+    // 2. PUSH it to cardsSelected ARR
+    // 3. Build STR
+    // 4. Change IMG .src
+    if (isSelected) {
+      cardIndex = generateCardIndex();
+
+      cardsSelected.push(cardsSlice);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardFiveImg.src = `${cardName}`;
+    }
+
+    // IF cardsSelected.includes(cardsSlice) = F - PUSH cardsSlice to cardsSelected ARR
+    if (!isSelected) {
+      cardsSelected.push(cardsSlice);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardFiveImg.src = `${cardName}`;
+    }
   }
 };
 
@@ -298,21 +420,12 @@ const cardResult5 = function () {
 dealBtn.addEventListener('click', function (e) {
   // VAR so no More than 2 Deal/Draws Poss
   dealCount++;
-  console.log(dealCount);
+  // console.log(dealCount);
 
   if (dealCount > 0) {
     playBtn.classList.remove('hide-element');
     this.textContent = 'DRAW';
   }
-
-  // if (dealCount === 2) {
-  //   const newHtml = `
-  //     <div class="deal-button">
-  //       <button class="btn-large" id="draw-btn">NEW GAME</button>
-  //     </div>`;
-
-  //   buttonsContainer.insertAdjacentHTML('beforeend', newHtml);
-  // }
 
   // Call Gen. Rand Nums FNs
   // bc ea "card FN" has eg. "cardFiveIsHeld" - these will ONLY Exec. if !cardFiveIsHeld
