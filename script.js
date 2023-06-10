@@ -97,6 +97,7 @@ let possibleCardsCopy = [];
 
 // Push Gen'd Card IDX STR here - so can run a check for ea. Card FN to see if the Card the Card FN Gen'd is already in here & IF it is = Re-Gen another Card
 let cardsSelected = [];
+console.log(cardsSelected);
 
 // So can only Deal/Draw 2x
 // to stop the ability to hold a Card b4 you DEAL
@@ -114,7 +115,10 @@ let cardFiveIsHeld = false;
 const init = function () {
   // Empty Poss Cards Copy ARR
   possibleCardsCopy = possibleCards;
-  console.log(possibleCardsCopy);
+
+  //
+  cardsSelected = [];
+
   //
   cardOneImg.src = './images/blue2.svg';
   cardTwoImg.src = './images/blue2.svg';
@@ -162,6 +166,8 @@ let generateCardIndex = function () {
 // Upd the .src in DOM
 
 const cardResult1 = function () {
+  // Check to see Cardsin ARR
+  console.log(cardsSelected);
   // Only Run IF Card isnt "Held"
   if (!cardOneIsHeld) {
     // Copy the Poss Cards into a New ARR
@@ -172,10 +178,67 @@ const cardResult1 = function () {
 
     // Call FN to Gen a Card IDX (between 0 & Cards ARR.length)
     cardIndex = generateCardIndex();
-    // console.log(`card1 IDX is ${cardIndex}`);
 
-    // Slice the Gen'd Cards STR From Cards ARR
-    const cardsSlice = possibleCardsCopy.slice(cardIndex, cardIndex + 1);
+    // Slice the Gen'd Cards STR From Cards ARR at its IDX - Returns (STR) "clubs_8"
+    // HAD TO CONVERT TO STRING() - bc .SLICE RETURNS an OBJ (& THUS .INCLUDES wouldnt Work)
+    let cardsSlice = String(possibleCardsCopy.slice(cardIndex, cardIndex + 1));
+
+    // IF cardsSelected ARR Doesnt Incl cardsSlice - PUSH cardsSlice to cardsSelected
+    // ... then 1. Embed cardsSlice in IMG Name  2. Use it to Update IMG .src
+    let isSelected = cardsSelected.includes(cardsSlice);
+    console.log(isSelected);
+
+    // IF cardsSelected ARR Incl's cardsSlice
+    // 1. Gen a diff Num for IDX
+    // 2. PUSH it to cardsSelected ARR
+    // 3. Build STR
+    // 4. Change IMG .src
+    if (isSelected) {
+      // Re-Gen New Rand. Num
+      cardIndex = generateCardIndex();
+
+      // Slice a STR From IDX - Gen'd by Rand Num
+      cardsSlice = String(possibleCardsCopy.slice(cardIndex, cardIndex + 1));
+
+      // Push the STR at that IDX - Into ARR
+      cardsSelected.push(cardsSlice);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardOneImg.src = `${cardName}`;
+    }
+
+    // IF cardsSelected.includes(cardsSlice) = F - PUSH cardsSlice to cardsSelected ARR
+    if (!isSelected) {
+      cardsSelected.push(cardsSlice);
+
+      // Embed Gen'd Cards STR From Cards ARR into the .src Path
+      let cardName = `./images/${cardsSlice}.svg`;
+
+      // Upd the SRC for IMG
+      cardOneImg.src = `${cardName}`;
+    }
+  }
+};
+
+const cardResult2 = function () {
+  console.log(cardsSelected);
+
+  // Only Run IF Card isnt "Held"
+  if (!cardTwoIsHeld) {
+    // Copy the Poss Cards into a New ARR
+    // possibleCardsCopy = possibleCards;
+    // To Hold Returns from Gen. Random Nums
+    // To Hold Returns from Gen. Random Nums
+    let cardIndex = 0;
+
+    // Call FN to Gen a Card IDX (between 0 & Cards ARR.length)
+    cardIndex = generateCardIndex();
+
+    // Slice the Gen'd Cards STR From Cards ARR at its IDX - Returns (STR) "clubs_8"
+    let cardsSlice = String(possibleCardsCopy.slice(cardIndex, cardIndex + 1));
     console.log(cardsSlice);
 
     // IF cardsSelected ARR Doesnt Incl cardsSlice - PUSH cardsSlice to cardsSelected
@@ -189,60 +252,13 @@ const cardResult1 = function () {
     // 3. Build STR
     // 4. Change IMG .src
     if (isSelected) {
+      // Re-Gen New Rand. Num
       cardIndex = generateCardIndex();
 
-      cardsSelected.push(cardsSlice);
+      // Slice a STR From IDX - Gen'd by Rand Num
+      cardsSlice = String(possibleCardsCopy.slice(cardIndex, cardIndex + 1));
 
-      // Embed Gen'd Cards STR From Cards ARR into the .src Path
-      let cardName = `./images/${cardsSlice}.svg`;
-
-      // Upd the SRC for IMG
-      cardOneImg.src = `${cardName}`;
-    }
-
-    // IF cardsSelected.includes(cardsSlice) = F - PUSH cardsSlice to cardsSelected ARR
-    if (!isSelected) {
-      console.log('not selected');
-      cardsSelected.push(cardsSlice);
-      console.log(cardsSelected);
-
-      // Embed Gen'd Cards STR From Cards ARR into the .src Path
-      let cardName = `./images/${cardsSlice}.svg`;
-
-      // Upd the SRC for IMG
-      cardOneImg.src = `${cardName}`;
-    }
-  }
-};
-
-const cardResult2 = function () {
-  // Only Run IF Card isnt "Held"
-  if (!cardTwoIsHeld) {
-    // Copy the Poss Cards into a New ARR
-    // possibleCardsCopy = possibleCards;
-    // To Hold Returns from Gen. Random Nums
-    let cardIndex = 0;
-
-    // Call FN to Gen a Card IDX (between 0 & Cards ARR.length)
-    cardIndex = generateCardIndex();
-    // console.log(`card2 IDX is ${cardIndex}`);
-
-    // Slice the Gen'd Cards STR From Cards ARR
-    const cardsSlice = possibleCardsCopy.slice(cardIndex, cardIndex + 1);
-    // console.log(cardsSplice);
-
-    // IF cardsSelected ARR Doesnt Incl cardsSlice - PUSH cardsSlice to cardsSelected
-    // ... then 1. Embed cardsSlice in IMG Name  2. Use it to Update IMG .src
-    let isSelected = cardsSelected.includes(cardsSlice);
-
-    // IF cardsSelected ARR Incl's cardsSlice
-    // 1. Gen a diff Num for IDX
-    // 2. PUSH it to cardsSelected ARR
-    // 3. Build STR
-    // 4. Change IMG .src
-    if (isSelected) {
-      cardIndex = generateCardIndex();
-
+      // Push the STR at that IDX - Into ARR
       cardsSelected.push(cardsSlice);
 
       // Embed Gen'd Cards STR From Cards ARR into the .src Path
@@ -266,24 +282,26 @@ const cardResult2 = function () {
 };
 
 const cardResult3 = function () {
+  console.log(cardsSelected);
+
   // Only Run IF Card isnt "Held"
   if (!cardThreeIsHeld) {
     // Copy the Poss Cards into a New ARR
     // possibleCardsCopy = possibleCards;
     // To Hold Returns from Gen. Random Nums
+    // To Hold Returns from Gen. Random Nums
     let cardIndex = 0;
 
     // Call FN to Gen a Card IDX (between 0 & Cards ARR.length)
     cardIndex = generateCardIndex();
-    // console.log(`card3 IDX is ${cardIndex}`);
 
-    // Slice the Gen'd Cards STR From Cards ARR
-    const cardsSlice = possibleCardsCopy.slice(cardIndex, cardIndex + 1);
-    // console.log(cardsSplice);
+    // Slice the Gen'd Cards STR From Cards ARR at its IDX - Returns (STR) "clubs_8"
+    let cardsSlice = String(possibleCardsCopy.slice(cardIndex, cardIndex + 1));
 
     // IF cardsSelected ARR Doesnt Incl cardsSlice - PUSH cardsSlice to cardsSelected
     // ... then 1. Embed cardsSlice in IMG Name  2. Use it to Update IMG .src
     let isSelected = cardsSelected.includes(cardsSlice);
+    console.log(isSelected);
 
     // IF cardsSelected ARR Incl's cardsSlice
     // 1. Gen a diff Num for IDX
@@ -291,8 +309,13 @@ const cardResult3 = function () {
     // 3. Build STR
     // 4. Change IMG .src
     if (isSelected) {
+      // Re-Gen New Rand. Num
       cardIndex = generateCardIndex();
 
+      // Slice a STR From IDX - Gen'd by Rand Num
+      cardsSlice = String(possibleCardsCopy.slice(cardIndex, cardIndex + 1));
+
+      // Push the STR at that IDX - Into ARR
       cardsSelected.push(cardsSlice);
 
       // Embed Gen'd Cards STR From Cards ARR into the .src Path
@@ -316,24 +339,26 @@ const cardResult3 = function () {
 };
 
 const cardResult4 = function () {
+  console.log(cardsSelected);
+
   // Only Run IF Card isnt "Held"
   if (!cardFourIsHeld) {
     // Copy the Poss Cards into a New ARR
     // possibleCardsCopy = possibleCards;
     // To Hold Returns from Gen. Random Nums
+    // To Hold Returns from Gen. Random Nums
     let cardIndex = 0;
 
     // Call FN to Gen a Card IDX (between 0 & Cards ARR.length)
     cardIndex = generateCardIndex();
-    // console.log(`card4 IDX is ${cardIndex}`);
 
-    // Slice the Gen'd Cards STR From Cards ARR
-    const cardsSlice = possibleCardsCopy.slice(cardIndex, cardIndex + 1);
-    // console.log(cardsSplice);
+    // Slice the Gen'd Cards STR From Cards ARR at its IDX - Returns (STR) "clubs_8"
+    let cardsSlice = String(possibleCardsCopy.slice(cardIndex, cardIndex + 1));
 
     // IF cardsSelected ARR Doesnt Incl cardsSlice - PUSH cardsSlice to cardsSelected
     // ... then 1. Embed cardsSlice in IMG Name  2. Use it to Update IMG .src
     let isSelected = cardsSelected.includes(cardsSlice);
+    console.log(isSelected);
 
     // IF cardsSelected ARR Incl's cardsSlice
     // 1. Gen a diff Num for IDX
@@ -341,8 +366,13 @@ const cardResult4 = function () {
     // 3. Build STR
     // 4. Change IMG .src
     if (isSelected) {
+      // Re-Gen New Rand. Num
       cardIndex = generateCardIndex();
 
+      // Slice a STR From IDX - Gen'd by Rand Num
+      cardsSlice = String(possibleCardsCopy.slice(cardIndex, cardIndex + 1));
+
+      // Push the STR at that IDX - Into ARR
       cardsSelected.push(cardsSlice);
 
       // Embed Gen'd Cards STR From Cards ARR into the .src Path
@@ -366,24 +396,26 @@ const cardResult4 = function () {
 };
 
 const cardResult5 = function () {
+  console.log(cardsSelected);
+
   // Only Run IF Card isnt "Held"
   if (!cardFiveIsHeld) {
     // Copy the Poss Cards into a New ARR
     // possibleCardsCopy = possibleCards;
     // To Hold Returns from Gen. Random Nums
+    // To Hold Returns from Gen. Random Nums
     let cardIndex = 0;
 
     // Call FN to Gen a Card IDX (between 0 & Cards ARR.length)
     cardIndex = generateCardIndex();
-    // console.log(`card5 IDX is ${cardIndex}`);
 
-    // Slice the Gen'd Cards STR From Cards ARR
-    const cardsSlice = possibleCardsCopy.slice(cardIndex, cardIndex + 1);
-    // console.log(cardsSplice);
+    // Slice the Gen'd Cards STR From Cards ARR at its IDX - Returns (STR) "clubs_8"
+    let cardsSlice = String(possibleCardsCopy.slice(cardIndex, cardIndex + 1));
 
     // IF cardsSelected ARR Doesnt Incl cardsSlice - PUSH cardsSlice to cardsSelected
     // ... then 1. Embed cardsSlice in IMG Name  2. Use it to Update IMG .src
     let isSelected = cardsSelected.includes(cardsSlice);
+    console.log(isSelected);
 
     // IF cardsSelected ARR Incl's cardsSlice
     // 1. Gen a diff Num for IDX
@@ -391,8 +423,13 @@ const cardResult5 = function () {
     // 3. Build STR
     // 4. Change IMG .src
     if (isSelected) {
+      // Re-Gen New Rand. Num
       cardIndex = generateCardIndex();
 
+      // Slice a STR From IDX - Gen'd by Rand Num
+      cardsSlice = String(possibleCardsCopy.slice(cardIndex, cardIndex + 1));
+
+      // Push the STR at that IDX - Into ARR
       cardsSelected.push(cardsSlice);
 
       // Embed Gen'd Cards STR From Cards ARR into the .src Path
@@ -420,7 +457,6 @@ const cardResult5 = function () {
 dealBtn.addEventListener('click', function (e) {
   // VAR so no More than 2 Deal/Draws Poss
   dealCount++;
-  // console.log(dealCount);
 
   if (dealCount > 0) {
     playBtn.classList.remove('hide-element');

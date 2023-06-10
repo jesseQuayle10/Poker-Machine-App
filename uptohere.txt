@@ -1,1 +1,5 @@
-Since changing to .slice() - instead of .splice() - I'm not running out of Cards - BUT DUPLICATE Card Prob has Returned
+Since changing to .slice() - instead of .splice() - I'm not running out of Cards - BUT DUPLICATE Card Prob has Returned = FIXED
+
+Had to Convert .slice Returns to String() - ELSE .includes() would ALWAYS Return false = FIXED
+
+***IF cardsSelected.includes the Gen'd STR - Re-Gen New Num - IF I Only have 1 CARD in "possibleCards" - that 1 Card still gets Rendered for the Rest of the Cards - MAYBE NOT SO MUCH OF A PROB IF 52 CARDS (1 IN 52 CHANCE) = FIXED (I THINK) - Need to test some more
